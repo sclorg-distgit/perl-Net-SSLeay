@@ -4,7 +4,7 @@
 
 Name:		%{?scl_prefix}perl-Net-SSLeay
 Version:	1.88
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:	Perl extension for using OpenSSL
 License:	Artistic 2.0
 URL:		https://metacpan.org/release/Net-SSLeay
@@ -20,6 +20,7 @@ BuildRequires:	openssl-devel
 BuildRequires:	%{?scl_prefix}perl-devel
 BuildRequires:	%{?scl_prefix}perl-generators
 BuildRequires:	%{?scl_prefix}perl-interpreter
+BuildRequires:	%{?scl_prefix}perl(Config)
 BuildRequires:	%{?scl_prefix}perl(Cwd)
 BuildRequires:	%{?scl_prefix}perl(ExtUtils::MakeMaker)
 BuildRequires:	%{?scl_prefix}perl(ExtUtils::PkgConfig)
@@ -35,7 +36,6 @@ BuildRequires:	%{?scl_prefix}perl(MIME::Base64)
 BuildRequires:	%{?scl_prefix}perl(Socket)
 BuildRequires:	%{?scl_prefix}perl(XSLoader)
 # =========== Test Suite =============================
-BuildRequires:	%{?scl_prefix}perl(Config)
 BuildRequires:	%{?scl_prefix}perl(File::Spec)
 BuildRequires:	%{?scl_prefix}perl(HTTP::Tiny)
 BuildRequires:	%{?scl_prefix}perl(IO::Handle)
@@ -79,6 +79,7 @@ so you can write servers or clients for more complicated applications.
 
 # Fix permissions in examples to avoid bogus doc-file dependencies
 chmod -c 644 examples/*
+%{?scl:scl enable %{scl} '}perl -MConfig -i -pe %{?scl:'"}'%{?scl:"'}s{^#!/usr/bin/perl}{$Config{startperl}}%{?scl:'"}'%{?scl:"'} examples/*.pl%{?scl:'}
 
 %build
 unset OPENSSL_PREFIX
@@ -113,6 +114,9 @@ unset RELEASE_TESTING
 %{_mandir}/man3/Net::SSLeay::Handle.3*
 
 %changelog
+* Thu Mar 26 2020 Petr Pisar <ppisar@redhat.com> - 1.88-6
+- Normalize the shebangs (bug #1817428)
+
 * Thu Feb 13 2020 Petr Pisar <ppisar@redhat.com> - 1.88-5
 - Import to SCL
 
